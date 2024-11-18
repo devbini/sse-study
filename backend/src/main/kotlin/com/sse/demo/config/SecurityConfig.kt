@@ -19,17 +19,17 @@ class SecurityConfig {
     // 필터 체인인데.. 일단 CSRF & CORS 설정만 해 둔 상태입니다.
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http.csrf { it.disable(); } // CSRF 비활성화
-            .cors { it.disable(); } // CORS 비활성화
+        http.csrf { it.disable() } // CSRF 비활성화
+            .cors { it.disable() } // CORS 비활성화
             .authorizeHttpRequests { auth ->
-                auth.requestMatchers("/api/login", "/notifications/**").permitAll() // 로그인 및 SSE는 모두 허용
-                    .anyRequest().authenticated();
+                auth.anyRequest().permitAll() // 모든 요청 허용
             }
             .sessionManagement { session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 세션 비활성화
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Stateless 세션
             }
         return http.build();
     }
+
 
     // 기본 암호화 적용
     @Bean
@@ -48,15 +48,15 @@ class SecurityConfig {
                 .build(),
             User.withUsername("userB")
                 .password(passwordEncoder.encode(rawPassword))
-                .roles("B")
+                .roles("userB")
                 .build(),
             User.withUsername("userC")
                 .password(passwordEncoder.encode(rawPassword))
-                .roles("C")
+                .roles("userC")
                 .build(),
             User.withUsername("userD")
                 .password(passwordEncoder.encode(rawPassword))
-                .roles("D")
+                .roles("userD")
                 .build()
         );
         return InMemoryUserDetailsManager(users);

@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Login from "./components/Login";
+import Notifications from "./components/Notification";
+import "./App.css";
 
-function App() {
+const App: React.FC = () => {
+  const [user, setUser] = useState<{ username: string; role: string } | null>(null); // 로그인 상태관리
+
+  const handleLogout = () => {
+    setUser(null);  
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {user ? (
+        // 로그인 후
+        <Notifications role={user.role} onLogout={handleLogout} />
+      ) : (
+        // 로그인 전
+        <Login onLogin={setUser} />
+      )}
     </div>
   );
-}
+};
 
 export default App;
